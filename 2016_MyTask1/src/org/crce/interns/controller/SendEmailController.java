@@ -1,3 +1,8 @@
+/*
+ * Authors:
+ * 			@Melwyn
+ * 			@Leon
+ */
 package org.crce.interns.controller;
 
 import java.io.File;
@@ -7,20 +12,15 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 
 @Controller
 public class SendEmailController {
@@ -49,7 +49,7 @@ public class SendEmailController {
 			f.delete();
 	}
 	
-	@RequestMapping(value = "/SubmitEmail.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/SubmitEmail", method = RequestMethod.POST)
 	public ModelAndView sendEmail(HttpServletRequest request,
 			@RequestParam(value = "fileUpload") CommonsMultipartFile[] file) throws IllegalStateException, IOException {
 		System.out.println(request.getParameter("message"));
@@ -69,6 +69,7 @@ public class SendEmailController {
 		
 		String input = request.getParameter("receiver");
 		String[] emailIds = input.split(" ");
+		
 		
 		javaMailSender.send(new MimeMessagePreparator() {
 			public void prepare(MimeMessage mimeMessage)
@@ -97,13 +98,15 @@ public class SendEmailController {
 		return model;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/sendMail.html")
+	@RequestMapping(method=RequestMethod.GET, value="/sendMail")
 	public ModelAndView email_welcome() {
+		System.out.println("Mapped to /sendMail");
 		return new ModelAndView("EmailForm");
+		//return new ModelAndView("Final");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/")
 	public ModelAndView welcome() {
-		return new ModelAndView("index");
+		return new ModelAndView("EmailForm");
 	}
 }
